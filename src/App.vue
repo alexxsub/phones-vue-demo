@@ -1,19 +1,29 @@
 <template>
   <div>
-    <!-- Описываем поле вводы и вешаем обработчик на нажатие клавиши Enter -->
+    <!-- Описываем поле ввода и вешаем обработчик на нажатие клавиши Enter -->
     <input placeholder="Введите номер" ref="number" v-model="newPhone.number" />
     <input placeholder="Введите имя" v-model="newPhone.name" @keyup.enter="addPhone" />
     <button v-show="editmode" @click="savePhone">Сохранить</button>
     <button v-show="editmode" @click="resetPhone">Отмена</button>
-    <ul>
-      <!-- Уже знакомый вывод списком-->
-      <li v-for="phone in phones" v-bind:key="phone.number">
-        <a href="#" @click="setPhone(phone)">{{phone.number}}</a>
-        {{phone.name}}
-        <button @click="deletePhone(phone)">x</button>
-      </li>
-      <!-- Номер используем в качестве ключа-->
-    </ul>
+
+     <table border="1">
+      <thead>
+        <tr>
+          <th v-for="key in Columns" :key="key">{{key}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="phone in phones" :key="phone.number">
+          <td>
+            <a href="#" @click="setPhone(phone)">{{phone.number}}</a>
+          </td>
+          <td>{{phone.name}}</td>
+          <td>
+            <input type="button" @click="deletePhone(phone)" value="X">
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 <script>
@@ -21,6 +31,7 @@ export default {
   data() {
     return {
       editmode: false, //флаг режима, режим true - правка данных, false -ввод новых
+      Columns: ["Номер", "Имя", ""],
       newPhone: {
         //элмент данных, запись в массиве
         number: "",
