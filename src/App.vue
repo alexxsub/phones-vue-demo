@@ -1,10 +1,13 @@
 <template>
   <div>
     <!-- Описываем поле вводы и вешаем обработчик на нажатие клавиши Enter -->
-    <input placeholder="Введите номер" v-model="newPhone" @keyup.enter="addPhone" />
+    <input placeholder="Введите номер" ref="number" v-model="newPhone.number" />
+    <!--Добавляем референс в атрибуте ref чтобы иметь доступ к элементу по пути this.$refs.<имя>-->
+    <input placeholder="Введите имя" v-model="newPhone.name" @keyup.enter="addPhone" />
     <ul>
       <!-- Уже знакомый вывод списком-->
-      <li v-for="phone in phones" v-bind:key="phone">{{phone}}</li>
+      <li v-for="phone in phones" v-bind:key="phone.number">{{phone.number}} {{phone.name}}</li>
+      <!-- Номер используем в качестве ключа-->
     </ul>
   </div>
 </template>
@@ -12,7 +15,10 @@
 export default {
   data() {
     return {
-      newPhone: "",
+      newPhone: {
+        number: "",
+        name: ""
+      },
       //массив с данными, обычный массив
       phones: []
     };
@@ -24,7 +30,8 @@ export default {
       //видимость переменных получаем через this
       this.phones.push(this.newPhone); //нам не надо заботится о выводе новых данных
       //как только элемент будет добавлен в массив, он появится в списке
-      this.newPhone = ""; // затираем переменную ввода
+      this.newPhone = { number: "", name: "" }; // затираем переменную ввода
+      this.$refs.number.focus(); //переводим фокус на поле ввода номера
     }
   }
 };
