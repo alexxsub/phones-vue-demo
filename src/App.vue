@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h2>Выводим список дел</h2>
-    <br />
+    <!-- Описываем поле вводы и вешаем обработчик на нажатие клавиши Enter -->
+    <input placeholder="Введите номер" v-model="newPhone" @keyup.enter="addPhone" />
     <ul>
-      <li v-for="todo in todos" v-bind:key="todo">{{ todo }}</li>
-      <!-- Перебираем массив todos и каждый элемент доступенв todo,
-      вы водим в шаблон-->
+      <!-- Уже знакомый вывод списком-->
+      <li v-for="phone in phones" v-bind:key="phone">{{phone}}</li>
     </ul>
   </div>
 </template>
@@ -13,14 +12,20 @@
 export default {
   data() {
     return {
+      newPhone: "",
       //массив с данными, обычный массив
-      todos: [
-        "Сходить за хлебом",
-        "Купить воблы",
-        "Не забыть про пивасик",
-        "А! еще колбаски"
-      ]
+      phones: []
     };
+  },
+  //раздел методов, описываем объектом methods , https://ru.vuejs.org/v2/api/#methods
+  methods: {
+    //фцнкция добавления в массив нового элемента
+    addPhone: function() {
+      //видимость переменных получаем через this
+      this.phones.push(this.newPhone); //нам не надо заботится о выводе новых данных
+      //как только элемент будет добавлен в массив, он появится в списке
+      this.newPhone = ""; // затираем переменную ввода
+    }
   }
 };
 </script>
