@@ -4,7 +4,8 @@ var _phones = [
   { number: "5555", name: "John" },
   { number: "6666", name: "Bill" },
   { number: "7777", name: "Smith" },
-  { number: "1234", name: "Sara" }
+  { number: "1234", name: "Sara" },
+  { number: "12345", name: "Vera" },
 ];
 //types for graphql
 const typeDefs = gql`

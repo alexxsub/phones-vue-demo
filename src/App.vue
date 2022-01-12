@@ -1,11 +1,14 @@
 <template>
   <div>
+  
     <!-- Описываем поле ввода и вешаем обработчик на нажатие клавиши Enter -->
     <input placeholder="Введите номер" ref="number" v-model="newPhone.number" />
+    <br>
     <input placeholder="Введите имя" v-model="newPhone.name" @keyup.enter="addPhone" />
-    <button v-show="editmode" @click="savePhone">Сохранить</button>
+    <br>
+    <button v-show="editmode" @click="savePhone">Сохранить</button> 
+    <br>
     <button v-show="editmode" @click="resetPhone">Отмена</button>
-
      <table border="1">
       <thead>
         <tr>
@@ -13,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="phone in phones" :key="phone.number">
+        <tr v-for="phone in Phones" :key="phone.number">
           <td>
             <a href="#" @click="setPhone(phone)">{{phone.number}}</a>
           </td>
@@ -27,6 +30,22 @@
   </div>
 </template>
 <script>
+import { gql } from "apollo-boost";
+//для компактности выделяем фрагмент gql
+const fragment = gql`
+  fragment Phone on Phone {
+    number
+    name
+  }
+`;
+const ALL_PHONES_QUERY = gql`
+  query Phones {
+    Phones {
+      ...Phone
+    }
+  }
+  ${fragment}
+`;
 export default {
   data() {
     return {
@@ -37,34 +56,18 @@ export default {
         number: "",
         name: ""
       },
-      index: -1, //индекс редактируемого элемента
-      //массив с данными, обычный массив
-      phones: []
+      index: -1 //индекс редактируемого элемента
+    
     };
   },
-  created() {
-    //метод вызывается при создании приложения
-    this.initialize();
+    apollo: {
+      Phones: {
+        query: ALL_PHONES_QUERY
+       }
   },
+
   //раздел методов, описываем объектом methods , https://ru.vuejs.org/v2/api/#methods
   methods: {
-    initialize() {
-      // инициализация демо данными
-      this.phones = [
-        {
-          number: "8903888777666",
-          name: "Петя"
-        },
-        {
-          number: "8920888333222",
-          name: "Вася"
-        },
-        {
-          number: "8909222333888",
-          name: "Маша"
-        }
-      ];
-    },
     //фцнкция добавления в массив нового элемента
     addPhone() {
       //видимость переменных получаем через this
